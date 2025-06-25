@@ -1,0 +1,132 @@
+/* Body.css */
+
+.main-content {
+  width: 100%;
+  background-color: #d0f3f0;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* height: 50vh; */
+}
+
+.drop-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.tite-section h2 {
+  font-size: 2rem;
+  color: #212121;
+  margin-bottom: 8px;
+  animation: fadeSlideIn 0.8s ease-in-out;
+}
+
+.tite-section p {
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.6;
+  animation: fadeSlideIn 1s ease-in-out;
+}
+
+/* .drop-box {
+  margin-top: 24px;
+  padding: 20px;
+  border: 2px dashed #555;
+  border-radius: 10px;
+  background-color: #ffffff;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.drop-box:hover {
+  background-color: #f5f5f5;
+} */
+
+.cartoon {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 280px;
+}
+
+.cartoon-img {
+  max-width: 100%;
+  height: auto;
+  animation: float 3s ease-in-out infinite;
+}
+
+.recommend-section {
+  padding: 40px 10px;
+  background-color: #fff;
+  margin-top: 40px;
+}
+
+.recommend-cnt {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .drop-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .info-section,
+  .cartoon {
+    width: 100%;
+  }
+
+  .tite-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .tite-section p {
+    font-size: 0.95rem;
+  }
+
+  .drop-box {
+    margin: 20px auto;
+    width: 90%;
+  }
+}
