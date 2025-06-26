@@ -1,4 +1,3 @@
-// import logo from "/png.png";
 import "../css/ConverterBox.css";
 
 const ConverterBox = ({ logo, title, info }) => {

@@ -13,8 +13,8 @@ const Body = () => {
               <h2>Convert Free</h2>
               <h2>Online Converter Files</h2>
               <p>
-                Easily convert videos, documents, eBooks, images, audio, PDFs,
-                and software. <br />
+                Easily convert documents, eBooks, images, PDFs.
+                <br />
                 All-in-one platform for all your file conversion needs.
               </p>
             </div>

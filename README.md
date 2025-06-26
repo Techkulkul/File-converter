@@ -1,12 +1,38 @@
-# React + Vite
+# Cue7ven File Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A powerful, fast, and user-friendly web-based file converter that supports multiple file formats. Convert your files instantly with our modern, responsive interface.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Multiple Format Support**: Convert between various image formats (JPG, PNG, WebP, AVIF, BMP, GIF)
+- **PDF Conversion**: Convert PDFs to images or Word documents
+- **Fast Processing**: Lightning-fast conversion with optimized algorithms
+- **Modern UI**: Clean, intuitive interface built with React
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Batch Processing**: Convert multiple files at once
+- **Privacy Focused**: All conversions happen securely without storing your files
+- **Free to Use**: No registration required, completely free
 
-## Expanding the ESLint configuration
+## 🛠️ Supported Conversions
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Image Formats
+
+- **JPG/JPEG** ↔ PNG, WebP, AVIF, BMP, GIF
+- **GIF** ↔ JPG, PNG, WebP, AVIF, BMP
+- **PNG** ↔ JPG, WebP, AVIF, BMP, GIF
+- **WebP** ↔ JPG, PNG, AVIF, BMP, GIF
+- **AVIF** ↔ JPG, PNG, WebP, BMP, GIF
+- **GIF** ↔ JPG, PNG, WebP, AVIF, BMP
+- **BMP** ↔ JPG, PNG, WebP, AVIF, GIF
+
+### Document Formats
+
+- **PDF** → Images (PNG/JPG)
+- **PDF** → Word Document (DOCX)
+
+## 🏃‍♂️ Quick Start
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn

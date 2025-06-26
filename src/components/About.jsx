@@ -1,3 +1,4 @@
+import React from "react";
 import "../css/About.css";
 
 const About = () => {
@@ -14,14 +15,12 @@ const About = () => {
           conversion effortless for everyone — whether you're a student,
           professional, or just someone trying to make sense of formats.
         </p>
-        <p>
-          Our platform supports a wide range of conversions including:
-          <ul>
-            <li>Documents (PDF to Word, PDF to Image)</li>
-            <li>Images (JPG, PNG, BMP, WBMP)</li>
-            <li>More formats coming soon!</li>
-          </ul>
-        </p>
+        <p>Our platform supports a wide range of conversions including:</p>
+        <ul>
+          <li>Documents (PDF to Word, PDF to Image)</li>
+          <li>Images (JPG, PNG, BMP, WBMP)</li>
+          <li>More formats coming soon!</li>
+        </ul>
         <p>
           With a clean interface, secure upload, and instant download, we
           prioritize your experience and privacy. No signups, no watermarks,

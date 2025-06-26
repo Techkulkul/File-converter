@@ -23,14 +23,10 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-content">
-          {/* Company Section */}
           <div className="footer-section">
             <h3 className="section-title">Company</h3>
             <div className="company-info">
               <div className="logo">
-                {/* <div className="logo-icon">
-                  <img src={companyLogo} className="company-img"></img>
-                </div> */}
                 <span className="company-name">CUE7VEN</span>
               </div>
               <div className="social-links">
@@ -59,7 +55,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation Section */}
           <div className="footer-section">
             <h3 className="section-title">Navigation</h3>
             <nav className="footer-nav">
@@ -78,7 +73,6 @@ const Footer = () => {
             </nav>
           </div>
 
-          {/* Legal Section */}
           <div className="footer-section">
             <h3 className="section-title">Legal</h3>
             <nav className="footer-nav">
@@ -94,7 +88,6 @@ const Footer = () => {
             </nav>
           </div>
 
-          {/* Contact Section */}
           <div className="footer-section">
             <h3 className="section-title">Contact Info</h3>
             <div className="contact-info">
@@ -114,7 +107,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="footer-bottom">
           <div className="copyright">
             <p>&copy; 2025 CUE7VEN. All Rights Reserved.</p>
