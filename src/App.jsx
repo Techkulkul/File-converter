@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import "./App.css";
 import Homepage from "./pages/Homepage";
 import Body from "./components/Body";
@@ -17,26 +17,5 @@ function App() {
     </>
   );
 }
-
-export const appRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/",
-        element: <Body />,
-      },
-      {
-        path: "/converterPage",
-        element: <ConverterPage />,
-      },
-      {
-        path: "/about",
-        element: <About />,
-      },
-    ],
-  },
-]);
 
 export default App;
