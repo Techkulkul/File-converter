@@ -21,7 +21,7 @@ export default function FileUpload({
       const selectedFile = e.target.files[0];
 
       // File validation based on converter type
-      if (sourceFormat === "pdf") {
+      if (sourceFormat === "pdf" || endpoint === "pdf-convert") {
         // PDF file validation
         const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
         if (fileExtension !== "pdf" && !selectedFile.type.includes("pdf")) {
@@ -86,30 +86,20 @@ export default function FileUpload({
 
     const formData = new FormData();
 
-    if (sourceFormat === "pdf") {
-      formData.append("uploaded_pdf", file);
-    } else {
-      formData.append("uploaded_img", file);
-    }
+    formData.append("uploaded_pdf", file);
 
     formData.append("convertTo", targetFormat);
 
-    if (converterType) {
-      formData.append("converterType", converterType);
-    }
-    if (sourceFormat) {
-      formData.append("sourceFormat", sourceFormat);
-    }
-    if (converterIndex !== null) {
-      formData.append("converterIndex", converterIndex.toString());
-    }
-    if (acceptedFormats.length > 0) {
-      formData.append("acceptedFormats", acceptedFormats.join(","));
-    }
+    const apiEndpoint = endpoint;
+
+    console.log(`Attempting to call endpoint: ${apiEndpoint}`);
+    console.log(
+      `Source format: ${sourceFormat}, Target format: ${targetFormat}`
+    );
 
     try {
       const res = await axios.post(
-        `http://localhost:8888/${endpoint}`,
+        `http://localhost:8888/${apiEndpoint}`,
         formData,
         {
           headers: {
@@ -123,63 +113,106 @@ export default function FileUpload({
           },
         }
       );
+      console.log(res);
 
-      const { downloadLink, convertedFilename } = res.data;
+      const {
+        success,
+        error: apiError,
+        download_link,
+        input_filename,
+      } = res.data;
 
-      if (!downloadLink) {
+      if (!success) {
+        throw new Error(apiError || "Conversion failed");
+      }
+
+      if (!download_link) {
         throw new Error("Download link missing in response");
       }
 
-      const imageResponse = await axios.get(
-        "http://localhost:8888" + downloadLink,
-        {
-          responseType: "blob",
-        }
-      );
+      const downloadLinks = Array.isArray(download_link)
+        ? download_link
+        : [download_link];
 
       setStatus("success");
       setUploadProgress(100);
 
-      let mimeType, fileExtension;
+      for (let i = 0; i < downloadLinks.length; i++) {
+        const link = downloadLinks[i];
 
-      if (targetFormat === "docx") {
-        mimeType =
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        fileExtension = "docx";
-      } else {
-        mimeType =
-          MIME_TYPES[targetFormat.toLowerCase()] || `image/${targetFormat}`;
-        fileExtension = targetFormat;
+        try {
+          const cleanLink = link.startsWith("/") ? link.substring(1) : link;
+          const downloadUrl = `http://localhost:8888/${cleanLink}`;
+
+          console.log(`Downloading from: ${downloadUrl}`);
+
+          const fileResponse = await axios.get(downloadUrl, {
+            responseType: "blob",
+          });
+
+          let mimeType, fileExtension, fileName;
+
+          if (targetFormat === "docx") {
+            mimeType =
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            fileExtension = "docx";
+            fileName =
+              link.split("/").pop() || `converted_document.${fileExtension}`;
+          } else if (targetFormat === "images" && endpoint === "pdf-convert") {
+            mimeType = "image/jpeg";
+            fileExtension = "jpg";
+            fileName =
+              link.split("/").pop() ||
+              `converted_page_${i + 1}.${fileExtension}`;
+          } else {
+            mimeType =
+              MIME_TYPES[targetFormat.toLowerCase()] || `image/${targetFormat}`;
+            fileExtension = targetFormat;
+            fileName =
+              link.split("/").pop() || `converted_file.${fileExtension}`;
+          }
+
+          const blob = new Blob([fileResponse.data], { type: mimeType });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        } catch (downloadError) {
+          console.error(`Failed to download file ${i + 1}:`, downloadError);
+          setError(
+            `Failed to download converted file ${i + 1}: ${
+              downloadError.message
+            }`
+          );
+        }
       }
-
-      const blob = new Blob([imageResponse.data], { type: mimeType });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = convertedFilename || `converted_file.${fileExtension}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Upload or download failed:", error);
+      console.error("Upload or conversion failed:", error);
       setStatus("error");
       setUploadProgress(0);
 
       if (error.response) {
-        setError(
-          `Server error: ${error.response.data?.message || "Conversion failed"}`
-        );
+        const errorMessage =
+          error.response.data?.error ||
+          error.response.data?.message ||
+          "Conversion failed";
+        setError(`Server error (${error.response.status}): ${errorMessage}`);
       } else if (error.request) {
         setError("Network error: Unable to reach the server");
       } else {
-        setError("An unexpected error occurred during conversion");
+        setError(
+          error.message || "An unexpected error occurred during conversion"
+        );
       }
     }
   }
 
   const getAcceptAttribute = () => {
-    if (sourceFormat === "pdf") {
+    if (sourceFormat === "pdf" || endpoint === "pdf-convert") {
       return "application/pdf,.pdf";
     } else if (sourceFormat === "image" && acceptedFormats.length > 0) {
       return acceptedFormats
@@ -196,7 +229,7 @@ export default function FileUpload({
   };
 
   const getFileInputHint = () => {
-    if (sourceFormat === "pdf") {
+    if (sourceFormat === "pdf" || endpoint === "pdf-convert") {
       return `Select a PDF file to convert to ${targetFormat.toUpperCase()}`;
     } else if (sourceFormat === "image" && acceptedFormats.length > 0) {
       return `Select an image file (${acceptedFormats
@@ -208,13 +241,25 @@ export default function FileUpload({
     return `Select a file to convert to ${targetFormat.toUpperCase()}`;
   };
 
+  const getConversionDescription = () => {
+    if (endpoint === "pdf-convert") {
+      if (targetFormat === "docx") {
+        return "PDF → DOCX";
+      } else if (targetFormat === "images") {
+        return "PDF → Images";
+      }
+    }
+    return `${
+      sourceFormat?.toUpperCase() || "File"
+    } → ${targetFormat.toUpperCase()}`;
+  };
+
   return (
     <div className="uploader-container">
       <div className="converter-info">
         <h3>File Converter</h3>
         <p>
-          <strong>Converting:</strong> {sourceFormat?.toUpperCase() || "File"} →{" "}
-          {targetFormat.toUpperCase()}
+          <strong>Converting:</strong> {getConversionDescription()}
         </p>
         {converterType && (
           <p>
@@ -288,7 +333,7 @@ export default function FileUpload({
         <div className="success-message">
           <p className="success-text">✅ File converted successfully!</p>
           <p>
-            Your converted {targetFormat.toUpperCase()} file has been
+            Your converted {targetFormat.toUpperCase()} file(s) have been
             downloaded.
           </p>
         </div>
