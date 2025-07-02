@@ -77,6 +77,15 @@ export default function FileUpload({
     }
   }
 
+  // Helper function to determine the correct FormData key
+  const getFormDataKey = () => {
+    if (sourceFormat === "pdf" || endpoint === "pdf-convert") {
+      return "uploaded_pdf";
+    } else {
+      return "uploaded_img";
+    }
+  };
+
   async function handleFileUpload() {
     if (!file) return;
 
@@ -86,13 +95,16 @@ export default function FileUpload({
 
     const formData = new FormData();
 
-    formData.append("uploaded_pdf", file);
+    // Dynamically set the key based on file type
+    const formDataKey = getFormDataKey();
+    formData.append(formDataKey, file);
 
     formData.append("convertTo", targetFormat);
 
     const apiEndpoint = endpoint;
 
     console.log(`Attempting to call endpoint: ${apiEndpoint}`);
+    console.log(`Using FormData key: ${formDataKey}`);
     console.log(
       `Source format: ${sourceFormat}, Target format: ${targetFormat}`
     );
