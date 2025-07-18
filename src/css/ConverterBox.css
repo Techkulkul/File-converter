@@ -52,3 +52,27 @@
     transform: translateY(0);
   }
 }
+
+.converter-logo.loading {
+  opacity: 0.5;
+}
+
+.converter-logo.loaded {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.converter-logo-fallback {
+  font-size: 2rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.converter-box {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.converter-box:hover {
+  transform: translateY(-2px);
+}

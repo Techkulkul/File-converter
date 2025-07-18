@@ -1,18 +1,31 @@
 import { Outlet } from "react-router-dom";
+import { Suspense } from "react";
 import "./App.css";
-import Homepage from "./pages/Homepage";
-import Body from "./components/Body";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import About from "./components/About";
-import ConverterBox from "./components/ConverterBox";
-import ConverterPage from "./components/ConverterPage";
+
+const LoadingSpinner = () => (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "200px",
+    }}
+  >
+    <div>Loading...</div>
+  </div>
+);
 
 function App() {
   return (
     <>
       <Header />
-      <Outlet />
+      <main>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Outlet />
+        </Suspense>
+      </main>
       <Footer />
     </>
   );
